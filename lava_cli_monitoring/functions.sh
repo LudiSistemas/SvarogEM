@@ -69,7 +69,7 @@ parse_and_display_jailed_events() {
     local chain_id=$(echo "$line" | awk -F'chain_id = ' '{print $2}' | awk '{print $1}')
     local complaint_cu=$(echo "$line" | awk -F'complaint_cu = ' '{print $2}' | awk '{print $1}')
     local height=$(echo "$line" | awk -F'height=' '{print $2}' | awk '{print $1}')
-
+    event_time=$(echo "$line" | grep -oP 'Event Time: \K.*?(?=Provider:)' | sed 's/Current Block: //')
 
         local event_key="${provider}_${chain_id}"
         
@@ -85,7 +85,7 @@ parse_and_display_jailed_events() {
                 local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local telegram_message="----------------------------------------%0A"
                 telegram_message+="Provider jailed event detected for $provider_name%0A"
-                telegram_message+="Event Time: $date_time%0A"
+                telegram_message+="Event Time: $event_time%0A"
                 telegram_message+="Provider: $provider_link%0A"
                 telegram_message+="Chain ID: $chain_id%0A"
                 telegram_message+="Complaint CU: $complaint_cu%0A"
@@ -147,6 +147,7 @@ parse_and_display_freeze_events() {
         local freeze_reason=$(echo "$line" | awk -F'freezeReason = ' '{print $2}' | awk '{print $1}' | tr -d ',')
         local chain_ids=$(echo "$line" | awk -F'chainIDs = ' '{print $2}' | awk -F', ' '{print $1}')
         local height=$(echo "$line" | awk -F'height=' '{print $2}' | awk '{print $1}' | tr -d ',')
+        event_time=$(echo "$line" | grep -oP 'Event Time: \K.*?(?=Provider:)' | sed 's/Current Block: //')
 
         local event_key="${provider_address}_${chain_ids}_${height}"
 
@@ -158,7 +159,7 @@ parse_and_display_freeze_events() {
             local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
             local telegram_message="----------------------------------------%0A"
             telegram_message+="Provider freeze event detected for $provider_name%0A"
-            telegram_message+="Event Time: $date_time%0A"
+            telegram_message+="Event Time: $event_time%0A"
             telegram_message+="Provider Address: $provider_address%0A"
             telegram_message+="Freeze Reason: $freeze_reason%0A"
             telegram_message+="Chain IDs: $chain_ids%0A"

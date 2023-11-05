@@ -281,3 +281,80 @@ echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
     fi
 done
 }
+parse_and_display_new_stake_events() {
+    local event_name=$1
+    local output
+    if ! output=$(run_lavad_command); then
+      return 1
+    fi
+
+    if [ "$event_name" != "lava_stake_new_provider" ]; then
+        echo "Event '$event_name' is not 'lava_stake_new_provider'. Skipping..."
+        return 0
+    fi
+
+    echo "$output" | grep "lava_stake_new_provider" | while read -r line; do
+        local date_time=$(echo "$line" | awk '{print $1, $2, $3}')
+        local provider=$(echo "$line" | awk -F'provider = ' '{print $2}' | awk '{print $1}' | tr -d ',')
+        local stake=$(echo "$line" | awk -F'stake = ' '{print $2}' | awk '{print $1}')
+        local geolocation=$(echo "$line" | awk -F'geolocation = ' '{print $2}' | awk '{print $1}')
+        local moniker=$(echo "$line" | awk -F'moniker = ' '{print $2}' | awk '{print $1}')
+        local spec=$(echo "$line" | awk -F'spec = ' '{print $2}' | awk '{print $1}' | tr -d ',')
+        local stake_applied_block=$(echo "$line" | awk -F'stakeAppliedBlock = ' '{print $2}' | awk '{print $1}')
+
+        local event_key="${provider}_${stake_applied_block}"
+
+        if [[ -z ${processed_events[$event_key]} ]]; then
+            processed_events[$event_key]=1
+
+            if [ "$USE_TELEGRAM" = true ]; then
+                local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
+                local telegram_message="----------------------------------------%0A"
+                telegram_message+="New provider stake event detected%0A"
+                telegram_message+="Event Time: $date_time%0A"
+                telegram_message+="Provider: $provider_link%0A"
+                telegram_message+="Moniker: $moniker%0A"
+                telegram_message+="Geolocation: $geolocation%0A"
+                telegram_message+="Spec: $spec%0A"
+                telegram_message+="Stake: $stake%0A"
+                telegram_message+="Stake Applied Block: $stake_applied_block%0A"
+                telegram_message+="----------------------------------------"
+
+                send_telegram_message "$telegram_message"
+
+            elif [ "$USE_SLACK" = true ]; then
+                local provider_link="<https://info.lavanet.xyz/provider/$provider|$provider>"
+                local slack_message="{
+                    \"text\": \"New provider stake event detected\",
+                    \"attachments\": [
+                        {
+                            \"fields\": [
+                                { \"title\": \"Event Time\", \"value\": \"$date_time\", \"short\": true },
+                                { \"title\": \"Provider\", \"value\": \"$provider_link\", \"short\": true },
+                                { \"title\": \"Moniker\", \"value\": \"$moniker\", \"short\": true },
+                                { \"title\": \"Geolocation\", \"value\": \"$geolocation\", \"short\": true },
+                                { \"title\": \"Spec\", \"value\": \"$spec\", \"short\": true },
+                                { \"title\": \"Stake\", \"value\": \"$stake\", \"short\": true },
+                                { \"title\": \"Stake Applied Block\", \"value\": \"$stake_applied_block\", \"short\": true }
+                            ]
+                        }
+                    ]
+                }"
+                send_slack_message "$slack_message"
+            else
+                echo "----------------------------------------"
+                echo "Date Time: $date_time"
+                echo "Provider: $provider"
+                echo "Moniker: $moniker"
+                echo "Geolocation: $geolocation"
+                echo "Spec: $spec"
+                echo "Stake: $stake"
+                echo "Stake Applied Block: $stake_applied_block"
+                echo "----------------------------------------"
+            fi
+
+        else
+            echo "Event for provider $provider at stake applied block $stake_applied_block has already been processed."
+        fi
+    done
+}

@@ -123,7 +123,7 @@ parse_and_display_jailed_events() {
         fi
     done
 }
-arse_and_display_freeze_events() {
+parse_and_display_freeze_events() {
     local event_name=$1
     local output
     if ! output=$(run_lavad_command); then

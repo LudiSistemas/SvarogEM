@@ -44,9 +44,15 @@ is_provider_monitored() {
 }
 
 parse_and_display_jailed_events() {
+    local event_name=$1
     local output
     if ! output=$(run_lavad_command); then
       return 1
+    fi
+
+    if [ "$event_name" != "lava_provider_jailed" ]; then
+        echo "Event '$event_name' is not 'lava_provider_jailed'. Skipping..."
+        return 0
     fi
 
     local count=$(echo "$output" | grep -c "lava_provider_jailed")

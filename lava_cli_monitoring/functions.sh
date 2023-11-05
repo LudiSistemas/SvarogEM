@@ -156,6 +156,7 @@ parse_and_display_freeze_events() {
 
        
             if [ "$USE_TELEGRAM" = true ]; then
+            local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
             local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
             local telegram_message="----------------------------------------%0A"
             telegram_message+="Provider freeze event detected for $provider_name%0A"

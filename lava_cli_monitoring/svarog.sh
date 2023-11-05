@@ -11,4 +11,13 @@ fi
 declare -A processed_events
 
 
-parse_and_display_jailed_events
+IFS=',' read -r -a event_names <<< "$event_name"
+for en in "${event_names[@]}"; do
+    if [ "$en" == "lava_provider_jailed" ]; then
+        parse_and_display_jailed_events "$en"
+    elif [ "$en" == "lava_freeze_provider" ]; then
+        parse_and_display_freeze_events "$en"
+    else
+        echo "Unsupported event name: $en"
+    fi
+done

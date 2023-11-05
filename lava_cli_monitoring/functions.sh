@@ -80,7 +80,7 @@ parse_and_display_jailed_events() {
 
             if is_provider_monitored "$provider"; then
             
-            if [ "$USE_TEKEGRAM" = true ]; then
+            if [ "$USE_TELEGRAM" = true ]; then
                 local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
                 local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local telegram_message="----------------------------------------%0A"
@@ -120,7 +120,6 @@ parse_and_display_jailed_events() {
             fi
 
             
-
             else
                 echo "Provider $provider is not on the monitored list."
             fi
@@ -153,15 +152,16 @@ parse_and_display_freeze_events() {
 
         if [[ -z ${processed_events[$event_key]} ]]; then
             processed_events[$event_key]=1
-
+            
+            if is_provider_monitored "$provider"; then
        
             if [ "$USE_TELEGRAM" = true ]; then
             local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
             local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
             local telegram_message="----------------------------------------%0A"
             telegram_message+="Provider freeze event detected for $provider_name%0A"
-            telegram_message+="Event Time: $event_timegit %0A"
-            telegram_message+="Provider Address: $provider_address%0A"
+            telegram_message+="Event Time: $event_time %0A"
+            telegram_message+="Provider Address: $provider_link%0A"
             telegram_message+="Freeze Reason: $freeze_reason%0A"
             telegram_message+="Chain IDs: $chain_ids%0A"
             telegram_message+="Height: $height%0A"
@@ -199,7 +199,9 @@ parse_and_display_freeze_events() {
                 echo "----------------------------------------"
             fi
 
-
+            else
+                echo "Provider $provider is not on the monitored list."
+            fi
 
         else
             echo "Event for provider $provider_address with chain IDs $chain_ids at height $height has already been processed."
@@ -231,14 +233,15 @@ echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
     if [[ -z ${processed_events[$event_key]} ]]; then
         processed_events[$event_key]=1
 
-    
+        if is_provider_monitored "$provider"; then
+
         if [ "$USE_TELEGRAM" = true ]; then
         local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
         local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
         local telegram_message="----------------------------------------%0A"
         telegram_message+="Provider unfreeze event detected for $provider_name%0A"
-        telegram_message+="Event Time: $event_timegit %0A"
-        telegram_message+="Provider Address: $provider_address%0A"
+        telegram_message+="Event Time: $event_time %0A"
+        telegram_message+="Provider Address: $provider_link%0A"
         telegram_message+="Chain IDs: $chain_ids%0A"
         telegram_message+="Height: $height%0A"
         telegram_message+="----------------------------------------"
@@ -274,7 +277,9 @@ echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
             echo "----------------------------------------"
         fi
 
-
+        else
+                echo "Provider $provider is not on the monitored list."
+        fi
 
     else
         echo "Event for provider $provider_address with chain IDs $chain_ids at height $height has already been processed."
@@ -301,17 +306,21 @@ parse_and_display_new_stake_events() {
         local moniker=$(echo "$line" | awk -F'moniker = ' '{print $2}' | awk '{print $1}')
         local spec=$(echo "$line" | awk -F'spec = ' '{print $2}' | awk '{print $1}' | tr -d ',')
         local stake_applied_block=$(echo "$line" | awk -F'stakeAppliedBlock = ' '{print $2}' | awk '{print $1}')
+        event_time=$(echo "$line" | grep -oP 'Event Time: \K.*?(?=Provider:)' | sed 's/Current Block: //')
 
         local event_key="${provider}_${stake_applied_block}"
 
         if [[ -z ${processed_events[$event_key]} ]]; then
             processed_events[$event_key]=1
+            
+            if is_provider_monitored "$provider"; then
 
             if [ "$USE_TELEGRAM" = true ]; then
                 local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
+                local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local telegram_message="----------------------------------------%0A"
                 telegram_message+="New provider stake event detected%0A"
-                telegram_message+="Event Time: $date_time%0A"
+                telegram_message+="Event Time: $event_time%0A"
                 telegram_message+="Provider: $provider_link%0A"
                 telegram_message+="Moniker: $moniker%0A"
                 telegram_message+="Geolocation: $geolocation%0A"
@@ -353,6 +362,9 @@ parse_and_display_new_stake_events() {
                 echo "----------------------------------------"
             fi
 
+            else
+                echo "Provider $provider is not on the monitored list."
+            fi
         else
             echo "Event for provider $provider at stake applied block $stake_applied_block has already been processed."
         fi

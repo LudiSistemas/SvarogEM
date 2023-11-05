@@ -22,7 +22,7 @@ run_lavad_command() {
   local success=false
 
   while [ $retries -gt 0 ]; do
-    output=$(lavad test events 1000 --event lava_provider_jailed --node https://testnet2-rpc-lb.lavanet.xyz:443 --timeout 1m 2>&1)
+    output=$(lavad test events $PAST_BLOCKS --event lava_provider_jailed --node $NODE --timeout 1m 2>&1)
     exit_status=$?
 
     if [ $exit_status -eq 0 ]; then

@@ -145,7 +145,7 @@ parse_and_display_freeze_events() {
         local date_time=$(echo "$line" | awk '{print $1, $2, $3}')
         local provider_address=$(echo "$line" | awk -F'providerAddress = ' '{print $2}' | awk '{print $1}' | tr -d ',')
         local freeze_reason=$(echo "$line" | awk -F'freezeReason = ' '{print $2}' | awk '{print $1}' | tr -d ',')
-        local chain_ids=$(echo "$line" | awk -F'chainIDs = ' '{print $2}' | awk -F', ' '{print $1}' | tr -d ',')
+        local chain_ids=$(echo "$line" | awk -F'chainIDs = ' '{print $2}' | awk -F', ' '{print $1}')
         local height=$(echo "$line" | awk -F'height=' '{print $2}' | awk '{print $1}' | tr -d ',')
 
         local event_key="${provider_address}_${chain_ids}_${height}"

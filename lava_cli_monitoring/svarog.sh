@@ -8,15 +8,17 @@ else
 fi
  source functions.sh
 
-declare -A processed_events
+
 
 
 IFS=',' read -r -a event_names <<< "$event_name"
 for en in "${event_names[@]}"; do
     if [ "$en" == "lava_provider_jailed" ]; then
+        declare -A processed_events
         echo "starting with $en"
         parse_and_display_jailed_events "$en" 
     elif [ "$en" == "lava_freeze_provider" ]; then
+        declare -A processed_events
         echo "starting with $en"
         parse_and_display_freeze_events "$en"
     else

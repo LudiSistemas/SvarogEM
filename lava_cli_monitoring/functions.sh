@@ -159,7 +159,7 @@ parse_and_display_freeze_events() {
             local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
             local telegram_message="----------------------------------------%0A"
             telegram_message+="Provider freeze event detected for $provider_name%0A"
-            telegram_message+="Event Time: $event_time%0A"
+            telegram_message+="Event Time: $event_timegit %0A"
             telegram_message+="Provider Address: $provider_address%0A"
             telegram_message+="Freeze Reason: $freeze_reason%0A"
             telegram_message+="Chain IDs: $chain_ids%0A"

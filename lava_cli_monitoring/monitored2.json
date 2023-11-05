@@ -1,0 +1,18 @@
+[
+    {
+      "wallet": "lava@10h0ly2066gdnlq508ekq42auwt6rmvc0n5xpj4",
+      "name": "provider1-eu"
+    },
+    {
+      "wallet": "lava@1etx55kw7tkmnjqz0k0mups4ewxlr324tddz2et",
+      "name": "provider2-eu"
+    },
+    {
+      "wallet": "lava@12u7dam8tyedr82ntwe6zz5e34n6vhr3kjlanaf",
+      "name": "provider1-us"
+    },
+    {
+      "wallet": "lava@1vfpuqq06426z3x4qsn38w6hdqrywqxlc6wmnxp",
+      "name": "provider2-us"
+    }
+  ]

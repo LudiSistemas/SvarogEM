@@ -63,7 +63,7 @@ parse_and_display_jailed_events() {
     fi
 
     echo "$output" | grep "lava_provider_jailed" | while read -r line; do
-
+    date_time=""
     local date_time=$(echo "$line" | awk '{print $1, $2, $3}')
     local provider=$(echo "$line" | awk -F'provider_address =' '{print $2}' | awk '{print $1}' | tr -d ',')
     local chain_id=$(echo "$line" | awk -F'chain_id = ' '{print $2}' | awk '{print $1}')

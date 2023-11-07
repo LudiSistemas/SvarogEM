@@ -141,7 +141,7 @@ parse_and_display_freeze_events() {
     fi
 
     echo "$output" | grep "lava_freeze_provider" | while read -r line; do
-        local date_time=$(echo "$line" | awk '{print $1, $2, $3}')
+        local date_time=$(echo "$line" | grep -oP '(\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})' | head -n 1)
         local provider_address=$(echo "$line" | awk -F'providerAddress = ' '{print $2}' | awk '{print $1}' | tr -d ',')
         local freeze_reason=$(echo "$line" | awk -F'freezeReason = ' '{print $2}' | awk '{print $1}' | tr -d ',')
         local chain_ids=$(echo "$line" | awk -F'chainIDs = ' '{print $2}' | awk -F', ' '{print $1}')
@@ -160,7 +160,7 @@ parse_and_display_freeze_events() {
             local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
             local telegram_message="----------------------------------------%0A"
             telegram_message+="Provider freeze event detected for $provider_name%0A"
-            telegram_message+="Event Time: $event_time %0A"
+            telegram_message+="Event Time: $date_time%0A"
             telegram_message+="Provider Address: $provider_link%0A"
             telegram_message+="Freeze Reason: $freeze_reason%0A"
             telegram_message+="Chain IDs: $chain_ids%0A"
@@ -222,7 +222,7 @@ if [ "$event_name" != "lava_unfreeze_provider" ]; then
 fi
 
 echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
-    local date_time=$(echo "$line" | awk '{print $1, $2, $3}')
+    local date_time=$(echo "$line" | grep -oP '(\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})' | head -n 1)
     local provider_address=$(echo "$line" | awk -F'providerAddress = ' '{print $2}' | awk '{print $1}' | tr -d ',')
     local chain_ids=$(echo "$line" | awk -F'chainIDs = ' '{print $2}' | awk -F', ' '{print $1}')
     local height=$(echo "$line" | awk -F'height=' '{print $2}' | awk '{print $1}' | tr -d ',')
@@ -240,7 +240,7 @@ echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
         local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
         local telegram_message="----------------------------------------%0A"
         telegram_message+="Provider unfreeze event detected for $provider_name%0A"
-        telegram_message+="Event Time: $event_time %0A"
+        telegram_message+="Event Time: $date_time %0A"
         telegram_message+="Provider Address: $provider_link%0A"
         telegram_message+="Chain IDs: $chain_ids%0A"
         telegram_message+="Height: $height%0A"
@@ -299,7 +299,7 @@ parse_and_display_new_stake_events() {
     fi
 
     echo "$output" | grep "lava_stake_new_provider" | while read -r line; do
-        local date_time=$(echo "$line" | awk '{print $1, $2, $3}')
+        local date_time=$(echo "$line" | grep -oP '(\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})' | head -n 1)
         local provider=$(echo "$line" | awk -F'provider = ' '{print $2}' | awk '{print $1}' | tr -d ',')
         local stake=$(echo "$line" | awk -F'stake = ' '{print $2}' | awk '{print $1}')
         local geolocation=$(echo "$line" | awk -F'geolocation = ' '{print $2}' | awk '{print $1}')
@@ -320,7 +320,7 @@ parse_and_display_new_stake_events() {
                 local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local telegram_message="----------------------------------------%0A"
                 telegram_message+="New provider stake event detected%0A"
-                telegram_message+="Event Time: $event_time%0A"
+                telegram_message+="Event Time: $date_time%0A"
                 telegram_message+="Provider: $provider_link%0A"
                 telegram_message+="Moniker: $moniker%0A"
                 telegram_message+="Geolocation: $geolocation%0A"

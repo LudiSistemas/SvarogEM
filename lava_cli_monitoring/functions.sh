@@ -38,6 +38,11 @@ run_lavad_command() {
   fi
 }
 
+is_provider_monitored() {
+    local provider=$1
+    jq -e --arg provider "$provider" '.[] | select(.wallet == $provider)' monitored2.json >/dev/null
+}
+
 parse_and_display_jailed_events() {
     local event_name=$1
     local output

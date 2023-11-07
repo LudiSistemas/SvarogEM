@@ -43,9 +43,20 @@ is_provider_monitored() {
     jq -e --arg provider "$provider" '.[] | select(.wallet == $provider)' monitored2.json >/dev/null
 }
 
+skip_to_jailed_events() {
+    while read -r line; do
+        if [[ "$line" == *"lava_provider_jailed"* ]]; then
+            # Found the first jailed event line, break the loop to continue processing.
+            break
+        fi
+    done < <(run_lavad_command)
+}
+
 parse_and_display_jailed_events() {
     local event_name=$1
     local output
+    local start_processing=false
+    
     if ! output=$(run_lavad_command); then
       return 1
     fi

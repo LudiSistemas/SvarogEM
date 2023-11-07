@@ -85,7 +85,7 @@ parse_and_display_jailed_events() {
                 local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local telegram_message="----------------------------------------%0A"
                 telegram_message+="Provider jailed event detected for $provider_name%0A"
-                telegram_message+="Event Time: $event_time%0A"
+                telegram_message+="Event Time: $date_time%0A"
                 telegram_message+="Provider: $provider_link%0A"
                 telegram_message+="Chain ID: $chain_id%0A"
                 telegram_message+="Complaint CU: $complaint_cu%0A"

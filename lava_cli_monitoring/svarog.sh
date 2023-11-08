@@ -10,7 +10,7 @@ else
     exit 1
 fi
 
-source functions.sh
+source "$script_dir/functions.sh"
 declare -A processed_events
 
 

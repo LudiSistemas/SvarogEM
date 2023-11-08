@@ -40,7 +40,7 @@ run_lavad_command() {
 
 is_provider_monitored() {
     local provider=$1
-    jq -e --arg provider "$provider" '.[] | select(.wallet == $provider)' monitored2.json >/dev/null
+    jq -e --arg provider "$provider" '.[] | select(.wallet == $provider)' monitored.json >/dev/null
 }
 
 parse_and_display_jailed_events() {
@@ -82,7 +82,7 @@ parse_and_display_jailed_events() {
             
             if [ "$USE_TELEGRAM" = true ]; then
                 local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
-                local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
+                local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored.json)
                 local telegram_message="----------------------------------------%0A"
                 telegram_message+="Provider jailed event detected for $provider_name%0A"
                 telegram_message+="Event Time: $date_time%0A"
@@ -97,7 +97,7 @@ parse_and_display_jailed_events() {
 
             if [ "$USE_SLACK" = true ]; then
                 local provider_link="<https://info.lavanet.xyz/provider/$provider|$provider>"
-                local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
+                local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored.json)
                 local slack_message="{
                     \"text\": \"Provider jailed event detected for $provider_name\",
                     \"attachments\": [
@@ -154,7 +154,7 @@ parse_and_display_freeze_events() {
        
             if [ "$USE_TELEGRAM" = true ]; then
             local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
-            local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
+            local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored.json)
             local telegram_message="----------------------------------------%0A"
             telegram_message+="Provider freeze event detected for $provider_name%0A"
             telegram_message+="Event Time: $date_time%0A"
@@ -168,7 +168,7 @@ parse_and_display_freeze_events() {
             fi
             if [ "$USE_SLACK" = true ]; then
                 echo "entered the slack loop"
-                local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
+                local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored.json)
                 local slack_message="{
                     \"text\": \"Provider freeze event detected for $provider_name\",
                     \"attachments\": [
@@ -226,7 +226,7 @@ echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
 
         if [ "$USE_TELEGRAM" = true ]; then
         local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
-        local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
+        local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored.json)
         local telegram_message="----------------------------------------%0A"
         telegram_message+="Provider unfreeze event detected for $provider_name%0A"
         telegram_message+="Event Time: $date_time %0A"
@@ -238,7 +238,7 @@ echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
         send_telegram_message "$telegram_message"
         fi
         if [ "$USE_SLACK" = true ]; then
-            local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
+            local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored.json)
             local slack_message="{
                 \"text\": \"Provider unfreeze event detected for $provider_name\",
                 \"attachments\": [
@@ -297,7 +297,7 @@ parse_and_display_new_stake_events() {
 
             if [ "$USE_TELEGRAM" = true ]; then
                 local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
-                local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
+                local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored.json)
                 local telegram_message="----------------------------------------%0A"
                 telegram_message+="New provider stake event detected%0A"
                 telegram_message+="Event Time: $date_time%0A"

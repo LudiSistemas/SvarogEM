@@ -1,12 +1,15 @@
 #!/bin/bash
 
-if [ -f .env ]; then
-    source $PWD/.env
+current_dir=$(pwd)
+
+
+if [ -f "$current_dir/.env" ]; then
+    source "$current_dir/.env"
 else
-    echo ".env file not found. Please create one with the necessary variables."
+    echo ".env file not found in the current directory. Please create one with the necessary variables."
     exit 1
 fi
- source functions.sh
+source functions.sh
 declare -A processed_events
 
 

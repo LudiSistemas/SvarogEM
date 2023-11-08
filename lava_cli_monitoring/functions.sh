@@ -93,9 +93,9 @@ parse_and_display_jailed_events() {
                 telegram_message+="----------------------------------------"
 
                 send_telegram_message "$telegram_message"
+            fi
 
-   #         elif [ "$USE_SLACK" = true ]; then
-                echo "entering slack loopt"
+            if [ "$USE_SLACK" = true ]; then
                 local provider_link="<https://info.lavanet.xyz/provider/$provider|$provider>"
                 local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local slack_message="{
@@ -115,11 +115,7 @@ parse_and_display_jailed_events() {
                 }"
 
                 send_slack_message "$slack_message"
-
-            else
-            echo "No communication channel avilable"
             fi
-
             
             else
                 echo "Provider $provider is not on the monitored list."
@@ -169,8 +165,8 @@ parse_and_display_freeze_events() {
             telegram_message+="----------------------------------------"
 
             send_telegram_message "$telegram_message"
-
-            elif [ "$USE_SLACK" = true ]; then
+            fi
+            if [ "$USE_SLACK" = true ]; then
                 echo "entered the slack loop"
                 local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local slack_message="{
@@ -190,15 +186,6 @@ parse_and_display_freeze_events() {
                 }"
 
                 send_slack_message "$slack_message"
-
-            else
-                echo "----------------------------------------"
-                echo "Date Time: $date_time"
-                echo "Provider Address: $provider_address"
-                echo "Freeze Reason: $freeze_reason"
-                echo "Chain IDs: $chain_ids"
-                echo "Height: $height"
-                echo "----------------------------------------"
             fi
 
             else
@@ -249,8 +236,8 @@ echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
         telegram_message+="----------------------------------------"
 
         send_telegram_message "$telegram_message"
-
-        elif [ "$USE_SLACK" = true ]; then
+        fi
+        if [ "$USE_SLACK" = true ]; then
             local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
             local slack_message="{
                 \"text\": \"Provider unfreeze event detected for $provider_name\",
@@ -268,15 +255,6 @@ echo "$output" | grep "lava_unfreeze_provider" | while read -r line; do
             }"
 
             send_slack_message "$slack_message"
-
-        else
-            echo "----------------------------------------"
-            echo "Date Time: $date_time"
-            echo "Provider Address: $provider_address"
-            echo "unfreeze Reason: $unfreeze_reason"
-            echo "Chain IDs: $chain_ids"
-            echo "Height: $height"
-            echo "----------------------------------------"
         fi
 
         else
@@ -332,8 +310,8 @@ parse_and_display_new_stake_events() {
                 telegram_message+="----------------------------------------"
 
                 send_telegram_message "$telegram_message"
-
-            elif [ "$USE_SLACK" = true ]; then
+                fi
+            if [ "$USE_SLACK" = true ]; then
                 local provider_link="<https://info.lavanet.xyz/provider/$provider|$provider>"
                 local slack_message="{
                     \"text\": \"New provider stake event detected\",
@@ -352,18 +330,7 @@ parse_and_display_new_stake_events() {
                     ]
                 }"
                 send_slack_message "$slack_message"
-            else
-                echo "----------------------------------------"
-                echo "Date Time: $date_time"
-                echo "Provider: $provider"
-                echo "Moniker: $moniker"
-                echo "Geolocation: $geolocation"
-                echo "Spec: $spec"
-                echo "Stake: $stake"
-                echo "Stake Applied Block: $stake_applied_block"
-                echo "----------------------------------------"
-            fi
-
+                fi
             else
                 echo "Provider $provider is not on the monitored list."
             fi

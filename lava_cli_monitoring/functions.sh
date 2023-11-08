@@ -94,7 +94,7 @@ parse_and_display_jailed_events() {
 
                 send_telegram_message "$telegram_message"
 
-            elif [ "$USE_SLACK" = true ]; then
+   #         elif [ "$USE_SLACK" = true ]; then
                 echo "entering slack loopt"
                 local provider_link="<https://info.lavanet.xyz/provider/$provider|$provider>"
                 local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)

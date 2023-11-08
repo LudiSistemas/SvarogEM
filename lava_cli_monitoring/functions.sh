@@ -170,6 +170,7 @@ parse_and_display_freeze_events() {
             send_telegram_message "$telegram_message"
 
             elif [ "$USE_SLACK" = true ]; then
+                echo "entered the slack loop"
                 local provider_name=$(jq -r --arg provider "$provider_address" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local slack_message="{
                     \"text\": \"Provider freeze event detected for $provider_name\",

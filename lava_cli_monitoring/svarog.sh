@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -f .env ]; then
-    source .env
+    source $PWD/.env
 else
     echo ".env file not found. Please create one with the necessary variables."
     exit 1

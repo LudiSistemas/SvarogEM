@@ -1,14 +1,15 @@
 #!/bin/bash
 
-current_dir=$(pwd)
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-
-if [ -f "$current_dir/.env" ]; then
-    source "$current_dir/.env"
+# Check if the .env file exists in the script's directory
+if [ -f "$script_dir/.env" ]; then
+    source "$script_dir/.env"
 else
-    echo ".env file not found in the current directory. Please create one with the necessary variables."
+    echo ".env file not found in the script's directory. Please create one with the necessary variables."
     exit 1
 fi
+
 source functions.sh
 declare -A processed_events
 

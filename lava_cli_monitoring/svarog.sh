@@ -10,6 +10,8 @@ else
     exit 1
 fi
 
+monitored_path="$script_dir/monitored.json"
+
 source "$script_dir/functions.sh"
 declare -A processed_events
 

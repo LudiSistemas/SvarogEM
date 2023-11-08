@@ -7,7 +7,7 @@ send_telegram_message() {
 
 send_slack_message() {
     local message="$1"
-    curl -s -X POST -H "Content-type: application/json" --data "{\"text\":\"$message\"}" "$SLACK_WEBHOOK_URL"
+    curl -s -X POST -H "Content-type: application/json" --data "$message" "$SLACK_WEBHOOK_URL"
 }
 
 run_lavad_command() {
@@ -95,7 +95,7 @@ parse_and_display_jailed_events() {
                 send_telegram_message "$telegram_message"
 
             elif [ "$USE_SLACK" = true ]; then
-                echo "entering slack loop"
+                echo "entering slack loopt"
                 local provider_link="<https://info.lavanet.xyz/provider/$provider|$provider>"
                 local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' monitored2.json)
                 local slack_message="{

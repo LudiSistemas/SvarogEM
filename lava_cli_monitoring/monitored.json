@@ -1,18 +1,18 @@
 [
     {
-      "wallet": "lava@10h0ly2066gdnlq508ekq42auwt6rmvc0n5xpj4",
+      "wallet": "lava@1e4vghfjertxq25l2vv56egkfkvdjk90t0c667v",
       "name": "provider1-eu"
     },
     {
-      "wallet": "lava@1etx55kw7tkmnjqz0k0mups4ewxlr324tddz2et",
+      "wallet": "lava@1kyhxrg453u6lfc77jwezyxrhy0laeuk69cpk4e",
       "name": "provider2-eu"
     },
     {
-      "wallet": "lava@16zu4n8ndxallq6nnh3j5q4lerygst58dvmv2gu",
+      "wallet": "lava@12u7dam8tyedr82ntwe6zz5e34n6vhr3kjlanaf",
       "name": "provider1-us"
     },
     {
-      "wallet": "lava@1sv6ngey7zl4lq4qfaftv9qp2e0c5utynmplp00ls",
+      "wallet": "lava@1vfpuqq06426z3x4qsn38w6hdqrywqxlc6wmnxp",
       "name": "provider2-us"
     }
   ]

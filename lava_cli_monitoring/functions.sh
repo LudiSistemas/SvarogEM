@@ -299,7 +299,7 @@ parse_and_display_new_stake_events() {
                 local provider_link="[$provider](https://info.lavanet.xyz/provider/$provider)"
                 local provider_name=$(jq -r --arg provider "$provider" '.[] | select(.wallet == $provider) | .name' $monitored_path)
                 local telegram_message="----------------------------------------%0A"
-                telegram_message+="New provider stake event detected%0A"
+                telegram_message+="New provider stake event detected for $provider_name %0A"
                 telegram_message+="Event Time: $date_time%0A"
                 telegram_message+="Provider: $provider_link%0A"
                 telegram_message+="Moniker: $moniker%0A"

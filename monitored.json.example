@@ -1,0 +1,18 @@
+[
+    {
+      "wallet": "lava@providerwallet_adresss",
+      "name": "your_provider_name_for_notification1"
+    },
+    {
+      "wallet": "lava@providerwallet_adresss",
+      "name": "your_provider_name_for_notification2"
+    },
+    {
+      "wallet": "lava@providerwallet_adresss",
+      "name": "your_provider_name_for_notification3"
+    },
+    {
+      "wallet": "lava@providerwallet_adresss",
+      "name": "your_provider_name_for_notification4"
+    }
+  ]

@@ -15,6 +15,7 @@ Just as Svarog forged the world, lavanet.xyz forged solutions to empower provide
 
 1. git clone this repository
 2. cp .env.example .env
+3. cp monitored.json.example monitored.json (add as many addresses as you want to monitor in json format)
 3. edit .env
 4. set cron to run svarog.sh every 30 minutes.
 

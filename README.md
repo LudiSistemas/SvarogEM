@@ -1,7 +1,7 @@
 # SvarogEM
 ![Svarog](https://github.com/LudiSistemas/SvarogEM/assets/32266954/f5de309e-e878-4f9b-8654-f5de83a0ba08)
 
-_Created by chatgpt in lavanet.xyz style_
+_Image created by chatgpt in lavanet.xyz style_
 
 **Svarog Event Monitoring**: Inspired by Slavic Heritage
 

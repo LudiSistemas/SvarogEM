@@ -12,10 +12,10 @@ Just as Svarog forged the world, lavanet.xyz forged solutions to empower provide
 
 ---
 ### Instalation
-
 1. git clone this repository
-2. cp .env.example .env
-3. cp monitored.json.example monitored.json (add as many addresses as you want to monitor in json format)
-3. edit .env
-4. set cron to run svarog.sh every 30 minutes.
+2. install https://docs.lavanet.xyz/testnet-manual
+3. cp .env.example .env
+4. cp monitored.json.example monitored.json (add as many addresses as you want to monitor in json format)
+5. edit .env
+6. set cron to run svarog.sh every 30 minutes.
 
